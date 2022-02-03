@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 import Head from 'next/head'
 
 import { SubscribeButton } from '../components/SubscribeButton'
@@ -37,8 +37,9 @@ export default function Home({ product}: HomeProps) {
     </>
   )
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
+// Estatico = GetStaticProps SSG | Static Site Generation (SSG)
+// Dinamico = Faz todo processo quando visitado SSR | Server side Rendering (SSR)
+export const getStaticProps: GetStaticProps = async () => {
 
 const price = await stripe.prices.retrieve('price_1KOpvpKV0sVQodorOk9Om7MB')
 
@@ -53,6 +54,6 @@ const price = await stripe.prices.retrieve('price_1KOpvpKV0sVQodorOk9Om7MB')
   return {
     props: {
       product,
-  }
+  }, revalidate: 60 * 60* 24 //Uma Hora
   }
 }

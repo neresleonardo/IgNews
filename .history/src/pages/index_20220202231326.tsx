@@ -30,7 +30,7 @@ export default function Home({ product}: HomeProps) {
         <p>Get access to all the publications<br/>
         <span>for {product.amount} month</span>
         </p>
-        <SubscribeButton />
+        <SubscribeButton priceId={product.priceId} />
         </section>
         <img src="/images/avatar.svg" alt="avatar" />
       </main>
@@ -38,15 +38,16 @@ export default function Home({ product}: HomeProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticSideProps: GetServerSideProps = async () => {
 
-const price = await stripe.prices.retrieve('price_1KOpvpKV0sVQodorOk9Om7MB', {
-  expand: ['product']
-})
+const price = await stripe.prices.retrieve('price_1KOpvpKV0sVQodorOk9Om7MB')
 
    const product = {
     priceId: price.id,
-    amount: price.unit_amount! / 100 
+    amount: new Intl.NumberFormat('en-Us', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(price.unit_amount! / 100),
    };
 
   return {
