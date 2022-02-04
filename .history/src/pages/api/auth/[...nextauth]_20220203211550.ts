@@ -39,12 +39,7 @@ export default NextAuth({
                 q.Collection('users'),
                 { data: {email}}
               ),
-              q.Get( //Select
-                q.Match(
-                  q.Index('user_by_email'),
-                  q.Casefold(user.email!)
-                )
-              )
+              q.Update
             )
           )
   

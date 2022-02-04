@@ -26,25 +26,9 @@ export default NextAuth({
         try {
 
           await fauna.query(
-            q.If(
-              q.Not(
-                q.Exists(
-                  q.Match(
-                    q.Index('user_by_email'),
-                    q.Casefold(user.email!)
-                  )
-                )
-              ),
-              q.Create(
-                q.Collection('users'),
-                { data: {email}}
-              ),
-              q.Get( //Select
-                q.Match(
-                  q.Index('user_by_email'),
-                  q.Casefold(user.email!)
-                )
-              )
+            q.Create(
+              q.Collection('users'),
+              { data: {email}}
             )
           )
   
@@ -54,7 +38,7 @@ export default NextAuth({
           console.log(err)
           return false
         }
-    } 
+    }
   }
 
 })
