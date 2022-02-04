@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { stripe } from "../../../services/stripe";
+import { stripe } from "../../services/stripe";
 import {getSession} from 'next-auth/react' ;
 
 export default async (req: NextApiRequest, res: NextApiResponse ) => {
