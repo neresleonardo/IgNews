@@ -2,7 +2,6 @@ import { useSession, signIn } from 'next-auth/react';
 import { stripe } from '../../services/stripe';
 import styles from './styles.module.scss'
 
-
 interface SubscribeButtonProps {
     priceId: string;
 }
@@ -16,7 +15,11 @@ interface SubscribeButtonProps {
       signIn('github')
       return;
     }
-  }
+
+    // criação de checkout session
+   
+
+    }
   
   return(
       <button onClick={handleSubscribe} type="button" className={styles.subscribeButton}>
