@@ -10,14 +10,14 @@ type Post = {
     slug: string;
     title: string;
     excerpt: string;
-    updated: string;
-}
+    updatedAt: string;
+  }
+  
+  interface PostsProps {
+    posts: Post[]
+  }
 
-interface PostsProps{
-    posts: Post[];
-}
-
-export default function Posts() {
+export default function Posts({posts}: PostsProps) {
     return(
         <>
         <Head>
@@ -26,35 +26,13 @@ export default function Posts() {
 
         <main className={styles.container}>
             <div className={styles.posts}>
-                <a href="#">
-                    <time>12 de dezembro de 2022</time>
-                    <strong>Criando sites com next.js</strong>
-                    <p> sdfsafd dsfdsgfafgsadg  asfdsfasdfdsf  asdfasdfdsafasdf sadfasdfdsa </p>
-                </a>
-
-                <a href="#">
-                    <time>12 de dezembro de 2022</time>
-                    <strong>Criando sites com next.js</strong>
-                    <p> sdfsafd dsfdsgfafgsadg  asfdsfasdfdsf  asdfasdfdsafasdf sadfasdfdsa </p>
-                </a>
-
-                <a href="#">
-                    <time>12 de dezembro de 2022</time>
-                    <strong>Criando sites com next.js</strong>
-                    <p> sdfsafd dsfdsgfafgsadg  asfdsfasdfdsf  asdfasdfdsafasdf sadfasdfdsa </p>
-                </a>
-
-                <a href="#">
-                    <time>12 de dezembro de 2022</time>
-                    <strong>Criando sites com next.js</strong>
-                    <p> sdfsafd dsfdsgfafgsadg  asfdsfasdfdsf  asdfasdfdsafasdf sadfasdfdsa </p>
-                </a>
-
-                <a href="#">
-                    <time>12 de dezembro de 2022</time>
-                    <strong>Criando sites com next.js</strong>
-                    <p> sdfsafd dsfdsgfafgsadg  asfdsfasdfdsf  asdfasdfdsafasdf sadfasdfdsa </p>
-                </a>
+                { posts.map(post => (
+                    <a key={post.slug} href="#">
+                        <time>{post.updatedAt}</time>
+                        <strong>{post.title}</strong>
+                        <p>{post.excerpt}</p>
+                    </a>
+                ))}
             </div>
         </main>
         </>
@@ -63,32 +41,32 @@ export default function Posts() {
 
 export const getStaticProps: GetStaticProps = async () => {
     const prismic = getPrismicClient()
-
+  
     const response = await prismic.query<any>([
-        Prismic.predicates.at('document.type', 'Publication')
+      Prismic.predicates.at('document.type', 'publication')
     ], {
-       fetch: ['Publication.title', 'Publication.content'],
-       pageSize: 100,
-    })
-
-    console.log(response);
+      fetch: ['publication.title', 'publication.content'],
+      pageSize: 100,
+    }
+    )
     
     const posts = response.results.map(post => {
         return {
             slug: post.uid,
             title: RichText.asText(post.data.title),
-            excerpt: post.data.content.find(content => content.type === 'paragraph')?.text ?? '',
-            updatedAt: new Date(post.last_publication_date!).toLocaleDateString('pt-BR',{
-                day:'2-digit',
-                month:'long',
-                year:'numeric'
-            })
-            };
-        });
+            excerpt: post.data.content.find((content: any)  =>
+             content.type === 'paragraph')?.text ?? '',
+             updatedAt: new Date(post.last_publication_date!).toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+              })
+            }
+          })
     
-    return {
-        props:{posts}
- 
- 
-    }
-} 
+        return {
+            props: {
+              posts
+            }
+          }
+        }
