@@ -3,7 +3,6 @@ import { getSession } from "next-auth/react"
 import Head from "next/head"
 import { RichText } from "prismic-dom"
 import styles from './post.module.scss'
-import { Header } from "../../components/Header"
 import { getPrismicClient } from "../../services/prismic"
 
 interface PostProps {
