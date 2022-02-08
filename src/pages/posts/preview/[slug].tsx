@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next"
+import { GetStaticPaths, GetStaticProps } from "next"
 import Head from "next/head"
 import { RichText } from "prismic-dom"
 import styles from '../post.module.scss'
@@ -26,7 +26,7 @@ export default function PostPreview({ post }: PostPropsPreiview) {
     if (session?.activeSubscription) {
       router.push(`/posts/${post.slug}`)
     }
-  }, [])
+  }, [session])
 
   return (
     <>
@@ -54,7 +54,8 @@ export default function PostPreview({ post }: PostPropsPreiview) {
   )
 }
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
+
   return {
     paths: [],
     fallback: 'blocking',
@@ -88,5 +89,6 @@ export const getStaticProps: GetStaticProps = async ({
     props: {
       post,
     },
+    redirect: 60 * 30 // 30 Minutos
   };
 };
